@@ -3,7 +3,7 @@ import cors from 'cors'
 import path from 'path'
 import { configDotenv } from 'dotenv'
 import connectToDB from './src/lib/db'
-
+import authRoutes from './src/routes/auth.route'
 
 configDotenv()
 const app = express()
@@ -20,8 +20,8 @@ app.use(
 
 
 // Routes
-/* app.use('/api/auth', authRoutes)
-app.use('/api/reports', reportRoutes)
+app.use('/api/auth', authRoutes)
+/* app.use('/api/reports', reportRoutes)
 app.use('/api/tasks', taskRoutes)
 app.use('/api/users', userRoutes) */
 
