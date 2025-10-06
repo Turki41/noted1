@@ -1,6 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import path from 'path'
+import fs from 'fs'
 import { configDotenv } from 'dotenv'
 import connectToDB from './src/lib/db'
 import authRoutes from './src/routes/auth.route'
@@ -21,6 +22,12 @@ app.use(
 
 // Routes
 app.use('/api/auth', authRoutes)
+// Serve uploads statically
+const uploadsDir = path.join(process.cwd(), 'uploads')
+if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true })
+}
+app.use('/uploads', express.static(uploadsDir))
 /* app.use('/api/reports', reportRoutes)
 app.use('/api/tasks', taskRoutes)
 app.use('/api/users', userRoutes) */
