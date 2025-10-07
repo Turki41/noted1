@@ -85,9 +85,9 @@ export const deleteUser = async (req: Request, res: Response) => {
         return res.status(200).json({ message: 'User deleted, tasks cleaned up' })
     } catch (error) {
         if (error instanceof Error) {
-            console.log('Error in login controller', error.message)
+            console.log('Error in deleteUser controller', error.message)
         } else {
-            console.log('Error in login controller', String(error))
+            console.log('Error in deleteUser controller', String(error))
         }
         res.status(500).json({ message: 'Internal Server error' })
     }
