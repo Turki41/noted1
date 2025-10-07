@@ -5,6 +5,7 @@ import fs from 'fs'
 import { configDotenv } from 'dotenv'
 import connectToDB from './src/lib/db'
 import authRoutes from './src/routes/auth.route'
+import userRoutes from './src/routes/user.route'
 
 configDotenv()
 const app = express()
@@ -22,15 +23,17 @@ app.use(
 
 // Routes
 app.use('/api/auth', authRoutes)
+app.use('/api/users', userRoutes)
+/* app.use('/api/reports', reportRoutes)
+app.use('/api/tasks', taskRoutes) */
+
+
 // Serve uploads statically
 const uploadsDir = path.join(process.cwd(), 'uploads')
 if (!fs.existsSync(uploadsDir)) {
     fs.mkdirSync(uploadsDir, { recursive: true })
 }
 app.use('/uploads', express.static(uploadsDir))
-/* app.use('/api/reports', reportRoutes)
-app.use('/api/tasks', taskRoutes)
-app.use('/api/users', userRoutes) */
 
 // Start Server
 const PORT = process.env.PORT || 5000
