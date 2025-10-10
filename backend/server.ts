@@ -7,6 +7,7 @@ import connectToDB from './src/lib/db'
 import authRoutes from './src/routes/auth.route'
 import userRoutes from './src/routes/user.route'
 import taskRoutes from './src/routes/task.route'
+import reportRoutes from './src/routes/report.route'
 
 configDotenv()
 const app = express()
@@ -26,7 +27,7 @@ app.use(
 app.use('/api/auth', authRoutes)
 app.use('/api/users', userRoutes)
 app.use('/api/tasks', taskRoutes)
-/* app.use('/api/reports', reportRoutes) */
+app.use('/api/reports', reportRoutes)
 
 
 // Serve uploads statically
