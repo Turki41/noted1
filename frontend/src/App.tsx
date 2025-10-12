@@ -1,44 +1,71 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom"
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
 import Login from "./pages/Auth/Login"
 import SignUp from "./pages/Auth/SignUp"
-import Dashboard from "./pages/Admin/Dashboard"
-import ManageTasks from "./pages/Admin/ManageTasks"
-import CreateTask from "./pages/Admin/CreateTask"
-import ManageUsers from "./pages/Admin/ManageUsers"
 import PrivateRoute from "./routes/PrivateRoute"
 import UserDashboard from './pages/User/Dashboard'
 import MyTasks from "./pages/User/MyTasks"
 import ViewTaskDetails from "./pages/User/ViewTaskDetails"
+import { Toaster } from "react-hot-toast"
+import UserProvider from "./context/UserProvider"
+
 
 
 function App() {
 
   return (
-    <div>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
+    <UserProvider>
+      <div>
+        <Toaster />
+        <BrowserRouter>
+          <Routes>
 
-          {/* Admin routes */}
-          <Route element={<PrivateRoute allowedRole={'admin'} />}>
-            <Route path="/admin/dashboard" element={<Dashboard />} />
-            <Route path="/admin/tasks" element={<ManageTasks />} />
-            <Route path="/admin/create-task" element={<CreateTask />} />
-            <Route path="/admin/users" element={<ManageUsers />} />
-          </Route>
+            {/* Public routes */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
 
+            <Route path="/" element={
+              <PrivateRoute>
+                <Root />
+              </PrivateRoute>
+            } />
 
-          {/* User routes */}
-          <Route element={<PrivateRoute allowedRole={'user'} />}>
-            <Route path="/user/dashboard" element={<UserDashboard />} />
-            <Route path="/user/tasks" element={<MyTasks />} />
-            <Route path="/user/task-details/:id" element={<ViewTaskDetails />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </div>
+            {/* Protected user routes */}
+            <Route
+              path="/user/dashboard"
+              element={
+                <PrivateRoute>
+                  <UserDashboard />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/user/tasks"
+              element={
+                <PrivateRoute>
+                  <MyTasks />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/user/task-details/:id"
+              element={
+                <PrivateRoute>
+                  <ViewTaskDetails />
+                </PrivateRoute>
+              }
+            />
+
+            {/* Catch-all fallback */}
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </BrowserRouter>
+      </div>
+    </UserProvider>
   )
 }
 
 export default App
+
+const Root = () => {
+  return <h1>fefef</h1>
+}

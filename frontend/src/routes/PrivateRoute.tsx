@@ -1,10 +1,21 @@
-import { Outlet } from "react-router-dom"
+import { useContext } from "react"
+import { Navigate, Outlet } from "react-router-dom"
+import { UserContext } from "../context/userContext"
 
-interface UserType {
-  allowedRole: 'admin' | 'user'
+interface PrivateRouteProps {
+  children?: React.ReactNode
 }
 
-const PrivateRoute = ({ allowedRole }: UserType) => {
+const PrivateRoute = ({ children }: PrivateRouteProps) => {
+  const userContext = useContext(UserContext)
+  if(!userContext) return null
+  const {user} = userContext
+
+
+  if(!user) {
+    return <Navigate to="/login" replace />
+  }
+  
   return <Outlet />
 }
 

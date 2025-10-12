@@ -1,7 +1,11 @@
-import { useState } from "react"
-import { Link } from "react-router-dom"
+import { useContext, useState } from "react"
+import { Link, useNavigate } from "react-router-dom"
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6"
 import { validateLogin } from "../../utils/helper"
+import axiosInstance from "../../utils/axiosInstance"
+import { API_PATHS } from "../../utils/apiPaths"
+import toast from "react-hot-toast"
+import { UserContext } from "../../context/userContext"
 
 
 const Login = () => {
@@ -10,17 +14,43 @@ const Login = () => {
   const [error, setError] = useState<string | null>(null)
   const [showPassword, setShowPassword] = useState(false)
 
+  const userContext = useContext(UserContext)
+  if (!userContext) return null
+  const { updateUser } = userContext
+
+  const navigate = useNavigate()
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword)
   }
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
 
     const isValid = validateLogin({ email, password, setError })
     if (!isValid) return
 
-    console.log(email, password)
+    //API Request
+    try {
+      const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN, {
+        email,
+        password
+      })
+
+      const { token } = response.data
+
+      if (token) {
+        localStorage.setItem('token', token)
+        updateUser(response.data)
+      }
+
+      toast.success('Logged in successfully')
+      navigate('/users/dashboard')
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error('Invalid credentails')
+      }
+    }
   }
 
 
