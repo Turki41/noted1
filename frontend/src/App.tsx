@@ -2,11 +2,11 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
 import Login from "./pages/Auth/Login"
 import SignUp from "./pages/Auth/SignUp"
 import PrivateRoute from "./routes/PrivateRoute"
-import UserDashboard from './pages/User/Dashboard'
 import MyTasks from "./pages/User/MyTasks"
 import ViewTaskDetails from "./pages/User/ViewTaskDetails"
 import { Toaster } from "react-hot-toast"
 import UserProvider from "./context/UserProvider"
+import Dashboard from "./pages/User/Dashboard"
 
 
 
@@ -34,7 +34,7 @@ function App() {
               path="/user/dashboard"
               element={
                 <PrivateRoute>
-                  <UserDashboard />
+                  <Dashboard />
                 </PrivateRoute>
               }
             />
@@ -67,5 +67,5 @@ function App() {
 export default App
 
 const Root = () => {
-  return <h1>fefef</h1>
+  return <h1>Root</h1>
 }
