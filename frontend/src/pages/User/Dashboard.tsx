@@ -10,6 +10,7 @@ import InfoCard from "../../components/InfoCard"
 import { LuArrowRight } from "react-icons/lu"
 import TaskListTable from "../../components/TaskListTable"
 import CustomPieChart from "../../components/CustomPieChart"
+import CustomBarChart from "../../components/CustomBarChart"
 
 
 type DashboardData = {
@@ -40,7 +41,7 @@ const Dashboard = () => {
   const [pieChartData, setPieChartData] = useState<{ status: string; count: number }[]>([]);
   const [barChartData, setBarChartData] = useState<{ priority: string; count: number }[]>([]);
 
-  const COLORS =['#8D51FF', '#00B8DB', '#7BCE00']
+  const COLORS = ['#8D51FF', '#00B8DB', '#7BCE00']
   /* useUserAuth() */
   const userContext = useContext(UserContext)
   if (!userContext) return null
@@ -132,14 +133,23 @@ const Dashboard = () => {
         <div>
           <div className="card">
             <div className="flex items-center justify-between">
-              <h5>
+              <h5 className="font-semibold">
                 Task Distribution
               </h5>
             </div>
-            <CustomPieChart data={pieChartData} colors={COLORS}/>
+            <CustomPieChart data={pieChartData} colors={COLORS} />
           </div>
         </div>
+        <div className="card">
+            <div className="flex items-center justify-between">
+              <h5 className="font-semibold">
+                Tasks Priority
+              </h5>
+            </div>
+            <CustomBarChart data={barChartData} />
+        </div>
       </div>
+
 
       <div className="w-full gap-6 my-4 md:my-6">
         <div className="">

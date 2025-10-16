@@ -7,6 +7,7 @@ import ViewTaskDetails from "./pages/User/ViewTaskDetails"
 import { Toaster } from "react-hot-toast"
 import UserProvider from "./context/UserProvider"
 import Dashboard from "./pages/User/Dashboard"
+import CreateTask from "./pages/User/CreateTask"
 
 
 
@@ -54,9 +55,17 @@ function App() {
                 </PrivateRoute>
               }
             />
+            <Route
+              path="/user/create-task"
+              element={
+                <PrivateRoute>
+                  <CreateTask/>
+                </PrivateRoute>
+              }
+            />
 
             {/* Catch-all fallback */}
-            <Route path="*" element={<Navigate to="/" />} />
+            <Route path="*" element={<Navigate to="/user/dashboard" />} />
           </Routes>
         </BrowserRouter>
       </div>
