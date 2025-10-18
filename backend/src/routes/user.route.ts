@@ -4,7 +4,7 @@ import { deleteUser, getUserById, getUsers } from '../controllers/user.controlle
 
 const router = express.Router()
 
-router.get('/', protect, adminOnly, getUsers) //Get all users (Admin only)
+router.get('/', protect, getUsers) //Get all users 
 router.get('/:id', protect, getUserById) //Get a specific user
 router.delete('/:id', protect, adminOnly, deleteUser) //Delete a user (Admin only)
 
