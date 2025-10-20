@@ -5,6 +5,7 @@ import { LuTrash2 } from "react-icons/lu"
 import { PRIORITY_DATA } from "../../utils/data"
 import SelectDropdown from "../../components/SelectDropdown"
 import SelectUsers from "../../components/SelectUsers"
+import TodoListInput from "../../components/TodoListInput"
 
 const CreateTask = () => {
     const location = useLocation()
@@ -114,21 +115,28 @@ const CreateTask = () => {
                                 <label className="text-sm font-medium text-slate-600" htmlFor="dueDate">Due Date</label>
 
                                 <input id="dueDate"
-                                 type="date"
-                                  className="form-input"
-                                  onChange={e => handleValueChange('dueDate', e.target.value)} />
+                                    type="date"
+                                    className="form-input"
+                                    onChange={e => handleValueChange('dueDate', e.target.value)} />
                             </div>
 
                             <div className="col-span-12 md:col-span-3">
                                 <label className="text-sm font-medium text-slate-600" htmlFor="selectUser">Assign To</label>
-
+                                
                                 <SelectUsers
-                                selectedUsers={taskData.assignedTo}
-                                setSelectedUsers={(users: any) => handleValueChange('assignedTo', users)}
+                                    selectedUsers={taskData.assignedTo}
+                                    setSelectedUsers={(users: any) => handleValueChange('assignedTo', users)}
                                 />
                             </div>
                         </div>
 
+                        <div className="mt-3">
+                            <label className="text-sm font-medium text-slate-600" htmlFor="checklist">
+                                TODO Checklist
+                            </label>
+
+                            <TodoListInput todoList={taskData?.todoChecklist} setTodoList={(value:string) => handleValueChange('todoChecklist', value)}/>
+                        </div>
                     </div>
                 </div>
             </div>
