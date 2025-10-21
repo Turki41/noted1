@@ -4,7 +4,7 @@ import { exportTasksReport, exportUserReport } from '../controllers/report.contr
 
 const router = express.Router()
 
-router.get('/export/tasks', protect, adminOnly, exportTasksReport)
-router.get('/export/users', protect, adminOnly, exportUserReport)
+router.get('/export/tasks', protect, exportTasksReport)
+router.get('/export/users', protect, exportUserReport)
 
 export default router

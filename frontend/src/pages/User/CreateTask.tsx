@@ -3,9 +3,13 @@ import DashboadLayout from "../../components/layout/DashboadLayout"
 import { useState } from "react"
 import { LuTrash2 } from "react-icons/lu"
 import { PRIORITY_DATA } from "../../utils/data"
-import SelectDropdown from "../../components/SelectDropdown"
-import SelectUsers from "../../components/SelectUsers"
-import TodoListInput from "../../components/TodoListInput"
+import SelectDropdown from "../../components/inputs/SelectDropdown"
+import TodoListInput from "../../components/inputs/TodoListInput"
+import SelectUsers from "../../components/inputs/SelectUsers"
+import AddAttachmentsInput from "../../components/inputs/AddAttachmentsInput"
+import axiosInstance from "../../utils/axiosInstance"
+import { API_PATHS } from "../../utils/apiPaths"
+import toast from "react-hot-toast"
 
 const CreateTask = () => {
     const location = useLocation()
@@ -15,7 +19,7 @@ const CreateTask = () => {
     const [taskData, setTaskData] = useState({
         title: '',
         description: '',
-        dueDate: null as Date | null,
+        dueDate: '' as Date | string,
         priority: 'Low',
         assignedTo: [],
         todoChecklist: [],
@@ -24,7 +28,7 @@ const CreateTask = () => {
 
     const [currentTask, setCurrentTask] = useState<any>(null)
 
-    const [error, setError] = useState('')
+    const [error, setError] = useState<null | string>('')
     const [loading, setLoading] = useState(false)
 
     const [openDeleteAlert, setOpenDeleteAlert] = useState(false)
@@ -37,7 +41,7 @@ const CreateTask = () => {
         setTaskData({
             title: '',
             description: '',
-            dueDate: null,
+            dueDate: '',
             priority: 'Low',
             assignedTo: [],
             todoChecklist: [],
@@ -46,12 +50,57 @@ const CreateTask = () => {
     }
 
     const createTask = async () => {
+        setLoading(true)
 
+        try {
+            const todoList = taskData.todoChecklist?.map((item) => ({
+                text: item,
+                completed: false
+            }))
+
+            const response = await axiosInstance.post(API_PATHS.TASKS.CREATE_TASK, {
+                ...taskData,
+                dueDate: new Date(taskData.dueDate).toISOString(),
+                todoChecklist: todoList
+            })
+            console.log(taskData)
+            toast.success('Task created succefully')
+        } catch (error) {
+            console.log('Error in create task', error)
+            setLoading(false)
+        } finally {
+            setLoading(false)
+        }
     }
 
     const updateTask = async () => { }
 
-    const handleSubmit = async () => { }
+    const handleSubmit = async () => {
+        setError(null)
+
+        if (!taskData.title.trim() || !taskData.description.trim()) {
+            setError('Please fill all fields')
+            return
+        } else if (!taskData.dueDate || taskData.dueDate === '') {
+            setError('Please choose due date')
+            return
+        } else if (taskData.todoChecklist?.length === 0) {
+            setError('Please Add at least one TODO task')
+            return
+        } else if (taskData.assignedTo?.length === 0) {
+            setError('Assign at least one person')
+            return
+        } else {
+            setError(null)
+        }
+
+        if (taskId) {
+            updateTask()
+            return
+        }
+
+        createTask()
+    }
 
     const getTaskDetailsById = async () => { }
 
@@ -61,7 +110,7 @@ const CreateTask = () => {
         <DashboadLayout>
             <div className="mt-5">
                 <div className="grid grid-cols-1 md:grid-cols-4 mt-4">
-                    <div className="form-card col-span-3">
+                    <div className="form-card col-span-4 lg:col-span-3">
                         <div className="flex items-center justify-between">
                             <h2>
                                 {taskId ? 'Edit Task' : 'Create New Task'}
@@ -122,7 +171,7 @@ const CreateTask = () => {
 
                             <div className="col-span-12 md:col-span-3">
                                 <label className="text-sm font-medium text-slate-600" htmlFor="selectUser">Assign To</label>
-                                
+
                                 <SelectUsers
                                     selectedUsers={taskData.assignedTo}
                                     setSelectedUsers={(users: any) => handleValueChange('assignedTo', users)}
@@ -135,7 +184,25 @@ const CreateTask = () => {
                                 TODO Checklist
                             </label>
 
-                            <TodoListInput todoList={taskData?.todoChecklist} setTodoList={(value:string) => handleValueChange('todoChecklist', value)}/>
+                            <TodoListInput todoList={taskData?.todoChecklist} setTodoList={(value: string) => handleValueChange('todoChecklist', value)} />
+                        </div>
+
+                        <div className="mt-3">
+                            <label className="text-sm font-medium text-slate-600" htmlFor="attachments">
+                                Add Attachments
+                            </label>
+
+                            <AddAttachmentsInput attachments={taskData?.attachments} setAttachments={(value: string) => handleValueChange('attachments', value)} />
+                        </div>
+
+                        {error && (
+                            <p className="text-sm text-red-500 mt-5 font-medium">{error}</p>
+                        )}
+
+                        <div className="flex justify-end">
+                            <button onClick={handleSubmit} disabled={loading} className="add-btn">
+                                {taskId ? 'Update Task' : 'Create Task'}
+                            </button>
                         </div>
                     </div>
                 </div>

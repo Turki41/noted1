@@ -17,10 +17,17 @@ export const protect = async (req: AuthRequest, res: Response, next: NextFunctio
 
         if (token && token.startsWith('Bearer')) {
             token = token.split(' ')[1] // Extract token
+
             const decoded = jwt.verify(token, process.env.SECRET_KEY!) as { id: string }
+
             const userDoc = await User.findById(decoded.id).select('-password')
-            req.user = userDoc ? { id: userDoc.id, role: (userDoc as any).role } : null
+            if (!userDoc) {
+                return res.status(404).json({ message: "User not found" });
+            }
+
+            req.user = { id: userDoc.id, role: (userDoc as any).role } 
             next()
+            
         } else {
             console.log('no token found')
             res.status(401).json({ message: 'no token found' })
@@ -33,10 +40,10 @@ export const protect = async (req: AuthRequest, res: Response, next: NextFunctio
 
 //Middleware for Admin-only access
 export const adminOnly = (req: AuthRequest, res: Response, next: NextFunction) => {
-    if(req.user && req.user.role === 'admin') {
+    if (req.user && req.user.role === 'admin') {
         next()
     } else {
         console.log('Error in auth middleware: admin only access')
-        res.status(500).json({error: 'admin Only access'})
+        res.status(500).json({ error: 'admin Only access' })
     }
 }
