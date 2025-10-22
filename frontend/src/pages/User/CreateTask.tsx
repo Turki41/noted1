@@ -63,7 +63,7 @@ const CreateTask = () => {
                 dueDate: new Date(taskData.dueDate).toISOString(),
                 todoChecklist: todoList
             })
-            console.log(taskData)
+            
             toast.success('Task created succefully')
         } catch (error) {
             console.log('Error in create task', error)
@@ -109,8 +109,8 @@ const CreateTask = () => {
     return (
         <DashboadLayout>
             <div className="mt-5">
-                <div className="grid grid-cols-1 md:grid-cols-4 mt-4">
-                    <div className="form-card col-span-4 lg:col-span-3">
+                <div className="mt-4">
+                    <div className="form-card">
                         <div className="flex items-center justify-between">
                             <h2>
                                 {taskId ? 'Edit Task' : 'Create New Task'}

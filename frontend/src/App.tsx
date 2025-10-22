@@ -8,6 +8,7 @@ import { Toaster } from "react-hot-toast"
 import UserProvider from "./context/UserProvider"
 import Dashboard from "./pages/User/Dashboard"
 import CreateTask from "./pages/User/CreateTask"
+import ManageTasks from "./pages/User/ManageTasks"
 
 
 
@@ -56,10 +57,18 @@ function App() {
               }
             />
             <Route
+              path="/user/manage-tasks"
+              element={
+                <PrivateRoute>
+                  <ManageTasks />
+                </PrivateRoute>
+              }
+            />
+            <Route
               path="/user/create-task"
               element={
                 <PrivateRoute>
-                  <CreateTask/>
+                  <CreateTask />
                 </PrivateRoute>
               }
             />

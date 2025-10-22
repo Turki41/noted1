@@ -11,13 +11,11 @@ export const getTasks = async (req: Request, res: Response) => {
             return res.status(401).json({ message: 'Unauthorized' })
         }
 
-        //If it's an admin return all tasks assigned to All members, if it's a user return only the tasks assigned to the specific user
-        const isAdmin = user.role === 'admin'
 
         const filter: any = {}
         if (status) filter.status = status
 
-        const match = isAdmin ? filter : { ...filter, assignedTo: user._id }
+        const match = filter
 
         const tasksDocs = await Task.find(match).populate('assignedTo', 'name email profileImageUrl')
 
@@ -26,7 +24,7 @@ export const getTasks = async (req: Request, res: Response) => {
             return { ...t.toObject(), completedTodoCount: completedCount }
         })
 
-        const baseCountFilter = isAdmin ? {} : { assignedTo: user._id }
+        const baseCountFilter = {}
 
         const [allTasks, pendingTasks, inProgressTasks, completedTasks] = await Promise.all([
             Task.countDocuments(baseCountFilter),
@@ -326,11 +324,11 @@ export const getUserDashboardData = async (req: Request, res: Response) => {
 
         const totalTasks = await Task.countDocuments({ assignedTo: userId })
         const pendingTasks = await Task.countDocuments({ assignedTo: userId, status: 'Pending' })
-        const completedTasks = await Task.countDocuments({assignedTo: userId, status: 'Completed'})
+        const completedTasks = await Task.countDocuments({ assignedTo: userId, status: 'Completed' })
         const overdueTasks = await Task.countDocuments({
             assignedTo: userId,
-            status: {$ne: 'Completed'},
-            dueDate: {$lt: new Date()}
+            status: { $ne: 'Completed' },
+            dueDate: { $lt: new Date() }
         })
 
         //Task distribution by status
@@ -388,7 +386,7 @@ export const getUserDashboardData = async (req: Request, res: Response) => {
             },
             recentTasks
         })
-        
+
     } catch (error) {
         if (error instanceof Error) {
             console.log('Error in getUserDashboardData controller', error.message)
