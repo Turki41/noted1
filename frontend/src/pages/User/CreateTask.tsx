@@ -63,7 +63,7 @@ const CreateTask = () => {
                 dueDate: new Date(taskData.dueDate).toISOString(),
                 todoChecklist: todoList
             })
-            
+            clearData()
             toast.success('Task created succefully')
         } catch (error) {
             console.log('Error in create task', error)

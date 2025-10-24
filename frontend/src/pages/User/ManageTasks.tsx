@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom'
 import axiosInstance from '../../utils/axiosInstance'
 import { API_PATHS } from '../../utils/apiPaths'
 import { LuFileSpreadsheet } from 'react-icons/lu'
+import TaskStatusTabs from '../../components/TaskStatusTabs'
+import TaskCard from '../../components/TaskCard'
 
 interface StatusArray {
     label: string,
@@ -19,7 +21,7 @@ const ManageTasks = () => {
     const getAllTasks = async () => {
         try {
             const response = await axiosInstance.get(API_PATHS.TASKS.GET_ALL_TASKS, {
-                params: filterStatus === 'All' ? '' : filterStatus
+                params: filterStatus === 'All' ? {} : { status: filterStatus }
             })
 
             setAllTasks(response.data?.tasks?.length > 0 ? response.data.tasks : [])
@@ -54,12 +56,39 @@ const ManageTasks = () => {
                 <div className='flex flex-col lg:flex-row lg:items-center justify-between'>
                     <div className='flex items-center justify-between gap-3'>
                         <h2 className='text-xl font-medium'>Manage Tasks</h2>
-
-                        <button className='flex lg:hidden download-btn' /* onClick={handleDownloadReport} */>
-                            <LuFileSpreadsheet className='text-lg'/>
-                            Download Report
-                        </button>
                     </div>
+                    {allTasks?.length > 0 && (
+                        <div className='flex mt-3 md:mt-0 justify-between items-center gap-3'>
+                            <TaskStatusTabs
+                                tabs={tabs}
+                                activeTab={filterStatus}
+                                setActiveTab={setfiterStatus}
+                            />
+                            <button className='hidden md:flex download-btn' /* onClick={handleDownloadReport} */>
+                                <LuFileSpreadsheet className='text-lg' />
+                                Download Report
+                            </button>
+                        </div>
+                    )}
+                </div>
+                <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mt-4'>
+                    {allTasks?.map((item: any, index) => (
+                        <TaskCard
+                            key={index}
+                            title={item.title}
+                            description={item.description}
+                            priority={item.priority}
+                            status={item.status}
+                            progress={item.progress}
+                            createdAt={item.createdAt}
+                            dueDate={item.dueDate}
+                            assignedTo={item.assignedTo?.map((user: any) => user.profileImageUrl)}
+                            attachmentCount={item.attachments?.length || 0}
+                            completedTodoCount={item.completedTodoCount || 0}
+                            todoChecklist={item.todoChecklist || []}
+                            onClick={() => handleClick(item)}
+                        />
+                    ))}
                 </div>
             </div>
 
