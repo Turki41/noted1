@@ -119,6 +119,7 @@ export const updateTask = async (req: Request, res: Response) => {
         task.dueDate = req.body.dueDate || task.dueDate
         task.todoChecklist = req.body.todoChecklist || task.todoChecklist
         task.attachments = req.body.attachments || task.attachments
+        task.assignedTo = req.body.assignedTo || task.assignedTo
 
         if (req.body.assignedTo && !Array.isArray(req.body.assignedTo)) {
             return res.status(400).json({ message: 'assignedTo must be an array of user IDs' })

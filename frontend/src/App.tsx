@@ -74,8 +74,8 @@ function App() {
             />
 
             {/* Catch-all fallback */}
-            <Route path="*" element={<Navigate to="/user/dashboard" />} />
-          </Routes>
+{/*             <Route path="*" element={<Navigate to="/user/dashboard" />} />
+ */}          </Routes>
         </BrowserRouter>
       </div>
     </UserProvider>

@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom"
 import DashboadLayout from "../../components/layout/DashboadLayout"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { LuTrash2 } from "react-icons/lu"
 import { PRIORITY_DATA } from "../../utils/data"
 import SelectDropdown from "../../components/inputs/SelectDropdown"
@@ -10,6 +10,9 @@ import AddAttachmentsInput from "../../components/inputs/AddAttachmentsInput"
 import axiosInstance from "../../utils/axiosInstance"
 import { API_PATHS } from "../../utils/apiPaths"
 import toast from "react-hot-toast"
+import moment from "moment"
+import Modal from "../../components/Modal"
+import DeleteAlert from "../../components/DeleteAlert"
 
 const CreateTask = () => {
     const location = useLocation()
@@ -73,7 +76,37 @@ const CreateTask = () => {
         }
     }
 
-    const updateTask = async () => { }
+    const updateTask = async () => {
+        try {
+            setLoading(true)
+            const todoList = taskData.todoChecklist?.map((item) => {
+                const prevTodoList = currentTask?.todoChecklist || []
+                const matchedTask = prevTodoList.find((task: any) => task.text == item)
+
+                return {
+                    text: item,
+                    completed: matchedTask ? matchedTask.completed : false
+                }
+            })
+
+            const response = await axiosInstance.put(API_PATHS.TASKS.UPDATE_TASK(taskId),
+                {
+                    ...taskData,
+                    dueDate: new Date(taskData.dueDate).toISOString(),
+                    todoChecklist: todoList,
+
+                })
+
+            navigate('/user/manage-tasks')
+            toast.success('Task updated successfully')
+        } catch (error) {
+            console.log('Error in update Task', error)
+            setLoading(false)
+        } finally {
+            setLoading(false)
+        }
+
+    }
 
     const handleSubmit = async () => {
         setError(null)
@@ -102,10 +135,51 @@ const CreateTask = () => {
         createTask()
     }
 
-    const getTaskDetailsById = async () => { }
+    const getTaskDetailsById = async (taskId: string) => {
+        try {
+            const response = await axiosInstance.get(API_PATHS.TASKS.GET_TASK_BY_ID(taskId))
 
-    const deleteTask = async () => { }
+            if (response.data) {
+                const taskInfo = response.data
+                setCurrentTask(taskInfo)
 
+                setTaskData((prev) => ({
+                    ...prev,
+                    title: taskInfo.title,
+                    description: taskInfo.description,
+                    dueDate: taskInfo.dueDate ? moment(taskInfo.dueDate).format('YYYY-MM-DD') : '',
+                    priority: taskInfo.priority,
+                    assignedTo: taskInfo?.assignedTo?.map((item: any) => item?._id),
+                    todoChecklist: taskInfo?.todoChecklist?.map((item: any) => item?.text) || [],
+                    attachments: taskInfo?.attachments || []
+                }))
+            }
+        } catch (error) {
+            console.log('error in getTaskDetailsById', error)
+        }
+    }
+
+    const deleteTask = async () => {
+        try {
+            await axiosInstance.delete(API_PATHS.TASKS.DELETE_TASK(taskId))
+
+            setOpenDeleteAlert(false)
+            toast.success('Task Deleted successfully')
+            navigate('/user/manage-tasks')
+        } catch (error) {
+            console.log('Error deleting task', error)
+        }
+
+    }
+
+
+    useEffect(() => {
+        if (taskId) {
+            getTaskDetailsById(taskId)
+        }
+
+        return () => { }
+    }, [taskId])
     return (
         <DashboadLayout>
             <div className="mt-5">
@@ -207,6 +281,22 @@ const CreateTask = () => {
                     </div>
                 </div>
             </div>
+
+            <Modal
+                isOpen={openDeleteAlert}
+                onClose={() => setOpenDeleteAlert(false)}
+                title="Delete Task"
+            >
+                <div>
+                    <p>Are you sure you want to delete this Task?</p>
+
+                    <div className="flex justify-end mt-6">
+                        <button onClick={deleteTask} className="flex items-center font-semibold justify-center gap-1.5 text-sm text-rose-500 whitespace-nowrap bg-rose-50 border border-rose-100 rounded-lg px-4 py-2">
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            </Modal>
         </DashboadLayout>
     )
 }

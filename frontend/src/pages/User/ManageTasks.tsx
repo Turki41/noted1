@@ -18,7 +18,7 @@ const ManageTasks = () => {
 
     const navigate = useNavigate()
 
-    const getAllTasks = async () => {
+    const getAllTasks = async (filterStatus: string) => {
         try {
             const response = await axiosInstance.get(API_PATHS.TASKS.GET_ALL_TASKS, {
                 params: filterStatus === 'All' ? {} : { status: filterStatus }
@@ -46,7 +46,7 @@ const ManageTasks = () => {
     }
 
     useEffect(() => {
-        getAllTasks(/* filterStatus */)
+        getAllTasks(filterStatus)
         return () => { }
     }, [filterStatus])
 
@@ -73,21 +73,22 @@ const ManageTasks = () => {
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mt-4'>
                     {allTasks?.map((item: any, index) => (
-                        <TaskCard
-                            key={index}
-                            title={item.title}
-                            description={item.description}
-                            priority={item.priority}
-                            status={item.status}
-                            progress={item.progress}
-                            createdAt={item.createdAt}
-                            dueDate={item.dueDate}
-                            assignedTo={item.assignedTo?.map((user: any) => user.profileImageUrl)}
-                            attachmentCount={item.attachments?.length || 0}
-                            completedTodoCount={item.completedTodoCount || 0}
-                            todoChecklist={item.todoChecklist || []}
-                            onClick={() => handleClick(item)}
-                        />
+                        <div onClick={() => handleClick(item)}>
+                            <TaskCard
+                                key={index}
+                                title={item.title}
+                                description={item.description}
+                                priority={item.priority}
+                                status={item.status}
+                                progress={item.progress}
+                                createdAt={item.createdAt}
+                                dueDate={item.dueDate}
+                                assignedTo={item.assignedTo?.map((user: any) => user.profileImageUrl)}
+                                attachmentCount={item.attachments?.length || 0}
+                                completedTodoCount={item.completedTodoCount || 0}
+                                todoChecklist={item.todoChecklist || []}
+                            />
+                        </div>
                     ))}
                 </div>
             </div>
