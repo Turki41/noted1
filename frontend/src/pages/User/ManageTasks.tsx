@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import DashboadLayout from '../../components/layout/DashboadLayout'
 import { useNavigate } from 'react-router-dom'
 import axiosInstance from '../../utils/axiosInstance'
 import { API_PATHS } from '../../utils/apiPaths'
 import { LuFileSpreadsheet } from 'react-icons/lu'
 import TaskStatusTabs from '../../components/TaskStatusTabs'
-import TaskCard from '../../components/TaskCard'
+import TaskCard from '../../components/cards/TaskCard'
+
 
 interface StatusArray {
     label: string,

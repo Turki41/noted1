@@ -9,6 +9,7 @@ import UserProvider from "./context/UserProvider"
 import Dashboard from "./pages/User/Dashboard"
 import CreateTask from "./pages/User/CreateTask"
 import ManageTasks from "./pages/User/ManageTasks"
+import Members from "./pages/User/Members"
 
 
 
@@ -69,6 +70,14 @@ function App() {
               element={
                 <PrivateRoute>
                   <CreateTask />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/user/members"
+              element={
+                <PrivateRoute>
+                  <Members />
                 </PrivateRoute>
               }
             />

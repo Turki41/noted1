@@ -1,6 +1,7 @@
 import moment from 'moment'
-import AvatarGroup from './AvatarGroup'
+
 import { LuPaperclip } from 'react-icons/lu'
+import AvatarGroup from '../AvatarGroup'
 
 const TaskCard = ({ title, description, priority, status, progress, createdAt, dueDate, assignedTo, attachmentCount, completedTodoCount, todoChecklist }: any) => {
     const getStatusTagColor = () => {

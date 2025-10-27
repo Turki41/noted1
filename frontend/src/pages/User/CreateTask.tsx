@@ -12,7 +12,6 @@ import { API_PATHS } from "../../utils/apiPaths"
 import toast from "react-hot-toast"
 import moment from "moment"
 import Modal from "../../components/Modal"
-import DeleteAlert from "../../components/DeleteAlert"
 
 const CreateTask = () => {
     const location = useLocation()

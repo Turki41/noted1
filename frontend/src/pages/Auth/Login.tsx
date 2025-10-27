@@ -45,7 +45,7 @@ const Login = () => {
       }
 
       toast.success('Logged in successfully')
-      navigate('/users/dashboard')
+      navigate('/user/dashboard')
     } catch (error) {
       if (error instanceof Error) {
         toast.error('Invalid credentails')

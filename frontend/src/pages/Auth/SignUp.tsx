@@ -54,7 +54,7 @@ const SignUp = () => {
       }
 
       toast.success('Signed up successfully')
-      navigate('/users/dashboard')
+      navigate('/user/dashboard')
     } catch (error) {
       if (error instanceof Error) {
         toast.error('Something went wrong')
