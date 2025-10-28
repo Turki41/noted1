@@ -52,6 +52,8 @@ export const getTasks = async (req: Request, res: Response) => {
     }
 }
 
+
+
 export const getTaskById = async (req: Request, res: Response) => {
     try {
         const task = await Task.findById(req.params.id).populate(
@@ -73,6 +75,50 @@ export const getTaskById = async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Internal Server error' })
     }
 }
+
+export const getUserTasks = async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user.id;
+    const { status } = req.query;
+
+    if (!userId) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    const baseCountFilter: any = { assignedTo: userId };
+    if (status) baseCountFilter.status = status;
+
+    const tasksDocs = await Task.find(baseCountFilter)
+      .populate('assignedTo', 'name email profileImageUrl');
+
+    const tasks = tasksDocs.map((t: any) => {
+      const completedCount = (t.todoChecklist || []).filter((i: any) => i.completed).length;
+      return { ...t.toObject(), completedTodoCount: completedCount };
+    });
+
+    const [allTasks, pendingTasks, inProgressTasks, completedTasks] = await Promise.all([
+      Task.countDocuments({ assignedTo: userId }),
+      Task.countDocuments({ assignedTo: userId, status: 'Pending' }),
+      Task.countDocuments({ assignedTo: userId, status: 'In Progress' }),
+      Task.countDocuments({ assignedTo: userId, status: 'Completed' }),
+    ]);
+
+    return res.status(200).json({
+      tasks,
+      statusSummary: {
+        all: allTasks,
+        pendingTasks,
+        inProgressTasks,
+        completedTasks,
+      },
+    });
+  } catch (error) {
+    console.log('Error in getUserTasks controller', error);
+    res.status(500).json({ message: 'Internal Server error' });
+  }
+};
+
+
 
 export const createTask = async (req: Request, res: Response) => {
     try {
@@ -167,13 +213,6 @@ export const updateTaskStatus = async (req: Request, res: Response) => {
             return res.status(404).json({ message: 'No task found' })
         }
 
-        const isAssigned = task.assignedTo.some(
-            (userId) => userId === (req as any).user._id
-        )
-
-        if (!isAssigned && (req as any).user.role !== 'admin') {
-            return res.status(400).json({ message: 'Not authorized' })
-        }
 
         task.status = req.body.status || task.status
 

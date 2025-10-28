@@ -1,12 +1,13 @@
 import express from 'express'
 import { adminOnly, protect } from '../middlewares/auth.middleware'
-import { createTask, deleteTask, getDashboardData, getTaskById, getTasks, getUserDashboardData, updateTask, updateTaskChecklist, updateTaskStatus } from '../controllers/task.controller'
+import { createTask, deleteTask, getDashboardData, getTaskById, getTasks, getUserDashboardData, getUserTasks, updateTask, updateTaskChecklist, updateTaskStatus } from '../controllers/task.controller'
 
 const router = express.Router()
 
 router.get('/dashboard-data', protect, getDashboardData)
 router.get('/user-dashboard-data', protect, getUserDashboardData)
 router.get('/', protect, getTasks)
+router.get('/user-tasks', protect, getUserTasks)
 router.get('/:id', protect, getTaskById)
 router.post('/', protect, createTask)
 router.put('/:id', protect, updateTask)

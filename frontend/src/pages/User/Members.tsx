@@ -4,6 +4,7 @@ import axiosInstance from "../../utils/axiosInstance"
 import { API_PATHS } from "../../utils/apiPaths"
 import { LuFileSpreadsheet } from "react-icons/lu"
 import UserCard from "../../components/cards/UserCard"
+import toast from "react-hot-toast"
 
 
 const Members = () => {
@@ -23,7 +24,25 @@ const Members = () => {
         }
     }
 
-    const handleDownLoadReport = async () => { }
+    const handleDownLoadReport = async () => { 
+        try {
+            const response = await axiosInstance.get(API_PATHS.REPORTS.EXPORT_USERS, {
+                responseType: 'blob'
+            })
+
+            const url = window.URL.createObjectURL(new Blob([response.data]))
+            const link = document.createElement('a')
+            link.href = url
+            link.setAttribute('download', 'users_report.xlsx')
+            document.body.appendChild(link)
+            link.click()
+            link.parentNode?.removeChild(link)
+            window.URL.revokeObjectURL(url)
+        } catch (error) {
+            console.log('Error downloading report:', error)
+            toast.error('Failed to download report. Please try again later.')
+        }
+    }
 
     useEffect(() => {
         getAllUsers()

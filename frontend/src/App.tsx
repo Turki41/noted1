@@ -3,7 +3,6 @@ import Login from "./pages/Auth/Login"
 import SignUp from "./pages/Auth/SignUp"
 import PrivateRoute from "./routes/PrivateRoute"
 import MyTasks from "./pages/User/MyTasks"
-import ViewTaskDetails from "./pages/User/ViewTaskDetails"
 import { Toaster } from "react-hot-toast"
 import UserProvider from "./context/UserProvider"
 import Dashboard from "./pages/User/Dashboard"
@@ -49,14 +48,7 @@ function App() {
                 </PrivateRoute>
               }
             />
-            <Route
-              path="/user/task-details/:id"
-              element={
-                <PrivateRoute>
-                  <ViewTaskDetails />
-                </PrivateRoute>
-              }
-            />
+            
             <Route
               path="/user/manage-tasks"
               element={

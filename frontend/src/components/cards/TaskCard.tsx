@@ -3,7 +3,7 @@ import moment from 'moment'
 import { LuPaperclip } from 'react-icons/lu'
 import AvatarGroup from '../AvatarGroup'
 
-const TaskCard = ({ title, description, priority, status, progress, createdAt, dueDate, assignedTo, attachmentCount, completedTodoCount, todoChecklist }: any) => {
+const TaskCard = ({ title, description, priority, status, createdAt, dueDate, assignedTo, attachmentCount, completedTodoCount, todoChecklist }: any) => {
     const getStatusTagColor = () => {
         switch (status) {
             case 'In Progress':
@@ -29,6 +29,10 @@ const TaskCard = ({ title, description, priority, status, progress, createdAt, d
                 return 'text-rose-500 bg-rose-50 border border-rose-500/10'
         }
     }
+
+    const progress = todoChecklist && todoChecklist.length > 0
+        ? Math.round(todoChecklist.filter((item: any) => item.completed).length / todoChecklist.length * 100)
+        : 0
 
     const Progress = () => {
         return (
