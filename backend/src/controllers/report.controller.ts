@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import Task from "../models/Task";
+import Task from "../models/Task.js";
 import excelJS from 'exceljs'
-import User from "../models/User";
+import User from "../models/User.js";
 
 export const exportTasksReport = async (req: Request, res: Response) => {
     try {

@@ -1,7 +1,7 @@
 import express from 'express'
-import { getUserProfile, loginUser, registerUser, updateUserProfile } from '../controllers/auth.controller'
-import { protect } from '../middlewares/auth.middleware'
-import upload from '../middlewares/upload.middleware'
+import { getUserProfile, loginUser, registerUser, updateUserProfile } from '../controllers/auth.controller.js'
+import { protect } from '../middlewares/auth.middleware.js'
+import upload from '../middlewares/upload.middleware.js'
 
 const router = express.Router()
 

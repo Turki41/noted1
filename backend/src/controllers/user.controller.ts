@@ -5,8 +5,8 @@
 // @access  Private (Admin) 
 
 import { Request, Response } from "express"
-import Task from "../models/Task"
-import User from "../models/User"
+import Task from "../models/Task.js"
+import User from "../models/User.js"
 
 export const getUsers = async (req: Request, res: Response) => {
     try {

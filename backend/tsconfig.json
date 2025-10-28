@@ -7,16 +7,15 @@
     "esModuleInterop": true,
     "allowJs": true,
     "outDir": "./dist",
-    "rootDir": "./",
+    "rootDir": "./src",
     "strict": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "types": ["node"]
+    "types": ["node"],
+    "rootDirs": ["src"]
   },
   "include": ["**/*.ts", "**/*.d.ts"],
   "files": ["src/types/express.d.ts"],
   "exclude": ["node_modules", "dist"]
 }
-
-

@@ -3,11 +3,11 @@ import cors from 'cors'
 import path from 'path'
 import fs from 'fs'
 import { configDotenv } from 'dotenv'
-import connectToDB from './src/lib/db'
-import authRoutes from './src/routes/auth.route'
-import userRoutes from './src/routes/user.route'
-import taskRoutes from './src/routes/task.route'
-import reportRoutes from './src/routes/report.route'
+import connectToDB from './lib/db.js'
+import authRoutes from './routes/auth.route.js'
+import userRoutes from './routes/user.route.js'
+import taskRoutes from './routes/task.route.js'
+import reportRoutes from './routes/report.route.js'
 
 configDotenv()
 const app = express()

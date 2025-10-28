@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import User from '../models/User'
+import User from '../models/User.js'
 import { Request, Response, NextFunction } from 'express'
 
 // Augment Express Request with user
