@@ -43,16 +43,16 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 
-app.use(express.static(path.join(__dirname, '../frontend/dist')))
+app.use(express.static(path.join(__dirname, '../../frontend/dist')))
 
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend', 'dist', 'index.html'))
+    res.sendFile(path.join(__dirname, '../../frontend', 'dist', 'index.html'))
 })
 
 
 
 // Start Server
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 4000
 app.listen(PORT, () => {
     console.log(`Server Started at port ${PORT}`)
     connectToDB()
