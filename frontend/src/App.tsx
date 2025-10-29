@@ -9,6 +9,7 @@ import Dashboard from "./pages/User/Dashboard"
 import CreateTask from "./pages/User/CreateTask"
 import ManageTasks from "./pages/User/ManageTasks"
 import Members from "./pages/User/Members"
+import PublicRoute from "./routes/PublicRoute"
 
 
 
@@ -22,14 +23,18 @@ function App() {
           <Routes>
 
             {/* Public routes */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<SignUp />} />
-
-            <Route path="/" element={
-              <PrivateRoute>
-                <Root />
-              </PrivateRoute>
+            <Route path="/login" element={
+              <PublicRoute>
+                <Login />
+              </PublicRoute>
             } />
+
+            <Route path="/signup" element={
+              <PublicRoute>
+                <SignUp />
+              </PublicRoute>
+            } />
+
 
             {/* Protected user routes */}
             <Route
@@ -48,7 +53,7 @@ function App() {
                 </PrivateRoute>
               }
             />
-            
+
             <Route
               path="/user/manage-tasks"
               element={
@@ -75,8 +80,8 @@ function App() {
             />
 
             {/* Catch-all fallback */}
-{/*             <Route path="*" element={<Navigate to="/user/dashboard" />} />
- */}          </Routes>
+            <Route path="*" element={<Navigate to="/user/dashboard" />} />
+          </Routes>
         </BrowserRouter>
       </div>
     </UserProvider>
