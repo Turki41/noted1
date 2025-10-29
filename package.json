@@ -1,0 +1,23 @@
+{
+  "name": "noted",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "cd backend && npm install && npm run build && cd ../frontend && npm install && npm run build",
+    "start": "cd backend && npm start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Turki41/noted1.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Turki41/noted1/issues"
+  },
+  "homepage": "https://github.com/Turki41/noted1#readme"
+}

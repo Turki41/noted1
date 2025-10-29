@@ -8,6 +8,8 @@ import authRoutes from './routes/auth.route.js'
 import userRoutes from './routes/user.route.js'
 import taskRoutes from './routes/task.route.js'
 import reportRoutes from './routes/report.route.js'
+import { fileURLToPath } from "url";
+
 
 configDotenv()
 const app = express()
@@ -36,6 +38,18 @@ if (!fs.existsSync(uploadsDir)) {
     fs.mkdirSync(uploadsDir, { recursive: true })
 }
 app.use('/uploads', express.static(uploadsDir))
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+
+app.use(express.static(path.join(__dirname, '../frontend/dist')))
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend', 'dist', 'index.html'))
+})
+
+
 
 // Start Server
 const PORT = process.env.PORT || 5000
